@@ -1,4 +1,4 @@
-A blank React app using Webpack 2 and yarn.
+A blank React app using Redux, postcss, Webpack 2 and yarn.
 
 ## Prerequisite
 node & yarn preinstalled
