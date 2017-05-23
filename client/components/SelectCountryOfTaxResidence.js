@@ -45,11 +45,12 @@ export default class SelectCountryOfTaxResidence extends React.Component {
   render() {
     const createOption = (countryTaxInfo) => <option key={countryTaxInfo.id} value={countryTaxInfo.id}>{countryTaxInfo.name}</option>;
     const { displayTin, labelTin } = this.shouldDisplayTin();
+    const selectedValue = this.state.countryTaxInfo ? this.state.countryTaxInfo.id : '';
     return (
       <div className={styles.container}>
-        <div style={{flex: '0 0 100%', marginBottom:'10px'}}>Select country of tax residence</div>
+        <div className={styles.title}>Select country of tax residence</div>
         <div className={styles.countryDropDown}>
-          <select style={{width:'130px'}} onChange={this.handleChange}>
+          <select style={{width:'130px'}} onChange={this.handleChange} value={selectedValue}>
             <option>Select a country</option>
             {this.props.taxInfoOfCountries.map(createOption)}
           </select>
@@ -63,9 +64,9 @@ export default class SelectCountryOfTaxResidence extends React.Component {
             </div>
         }
         {
-          this.state.countryTaxInfo && <div  style={{flex: '0 0 100%', marginTop:'10px'}}><input onClick={this.handleSelect} type="button" value="Select"/></div>
+          this.state.countryTaxInfo && <div  className={styles.selectButtonContainer}><input onClick={this.handleSelect} type="button" value="Select"/></div>
         }
-        
+
       </div>
     );
   }

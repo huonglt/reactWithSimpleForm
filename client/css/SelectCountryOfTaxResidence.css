@@ -5,6 +5,10 @@
   flex-wrap: wrap;
 }
 
+.title {
+  flex: 0 0 100%;
+  margin-bottom: 10px;
+}
 .countryDropDown {
   width: 150px;
 }
@@ -23,4 +27,9 @@
 
 .spaceLeft {
   margin-left: 10px;
+}
+
+.selectButtonContainer {
+  flex: 0 0 100%;
+  margin-top: 10px;
 }
