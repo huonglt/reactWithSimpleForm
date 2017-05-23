@@ -33,7 +33,7 @@ export default class SelectCountryOfTaxResidence extends React.Component {
     let labelTin = null;
     if(countryTaxInfo) {
       displayTin = (countryTaxInfo.tinRequired === true || countryTaxInfo.tinRequired === false);
-      labelTin = (countryTaxInfo.tinRequired === false) ? 'Optional' : '';
+      labelTin = (countryTaxInfo.tinRequired === false) ? '(Optional)' : '';
     }
 
     return { displayTin, labelTin };
