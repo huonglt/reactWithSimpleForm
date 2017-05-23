@@ -9,8 +9,12 @@
   flex: 0 0 100%;
   margin-bottom: 10px;
 }
-.countryDropDown {
+.countryDropDownContainer {
   width: 150px;
+}
+
+.countryDropDown {
+  width: 130px;
 }
 
 .resultContainer {

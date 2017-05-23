@@ -49,8 +49,8 @@ export default class SelectCountryOfTaxResidence extends React.Component {
     return (
       <div className={styles.container}>
         <div className={styles.title}>Select country of tax residence</div>
-        <div className={styles.countryDropDown}>
-          <select style={{width:'130px'}} onChange={this.handleChange} value={selectedValue}>
+        <div className={styles.countryDropDownContainer}>
+          <select className={styles.countryDropDown} onChange={this.handleChange} value={selectedValue}>
             <option>Select a country</option>
             {this.props.taxInfoOfCountries.map(createOption)}
           </select>
