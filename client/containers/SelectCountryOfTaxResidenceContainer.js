@@ -1,12 +1,12 @@
 import { connect } from 'react-redux';
 import SelectCountryOfTaxResidence from '../components/SelectCountryOfTaxResidence';
-
+import { selectCountryOfTaxResidenceAction } from '../redux/reducers/actions';
 
 const mapStateToProps = (state) => ({ countryOfTaxResidence: state.countryOfTaxResidence })
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    selectCountryOfTaxResidence: (countryOfTaxResidence) => dispatch({ type: 'SELECT_COUNTRY_OF_TAX_RESIDENCE', countryOfTaxResidence})
+    selectCountryOfTaxResidence: (countryOfTaxResidence) => dispatch(selectCountryOfTaxResidenceAction(countryOfTaxResidence))
   }
 }
 
