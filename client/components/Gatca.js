@@ -21,8 +21,21 @@ export default class Gatca extends React.Component {
 
   selectCountry(index, countryName) {
     let selectedCountries = this.state.selectedCountries;
-    selectedCountries[index] = countryName;
-    this.setState((prevState) => ({...prevState, selectedCountries}));
+    let ok = true;
+    let i = 1;
+    while(i <= this.state.cnt && countryName) {
+      if(i != index && this.state.selectedCountries[i] == countryName) {
+        ok = false;
+        break;
+      }
+      i++;
+    }
+    if(ok) {
+      selectedCountries[index] = countryName;
+      this.setState((prevState) => ({...prevState, selectedCountries}));
+      return true;
+    }
+    return false;
   }
 
   removeHandler(index) {

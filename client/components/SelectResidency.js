@@ -10,7 +10,11 @@ export default class SelectResidency extends React.Component {
   }
   selectCountry() {
     if(this.props.selectCountry) {
-      this.props.selectCountry(this.props.index, arguments[0]);
+      let result = this.props.selectCountry(this.props.index, arguments[0]);
+      console.log('result = ' + result);
+      if(!result) {
+        console.log('already choosen country at ' + this.props.index);
+      }
     }
   }
   removeHandler() {

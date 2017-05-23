@@ -1,0 +1,26 @@
+.container {
+  display: flex;
+  margin-top: 20px;
+  width: 700px;
+  flex-wrap: wrap;
+}
+
+.countryDropDown {
+  width: 150px;
+}
+
+.resultContainer {
+  display: flex;
+  margin-top: 20px;
+  flex-direction: column;
+  flex: 0 0 100%;
+}
+
+.tinContainer {
+  width: 450px;
+  display: flex;
+}
+
+.spaceLeft {
+  margin-left: 10px;
+}
