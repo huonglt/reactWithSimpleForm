@@ -6,10 +6,6 @@
   width: 30px;
   height: 30px;
   background-color: #ffffff;
-  /*
-  box-shadow: inset 0 0 5px 0 rgba(0, 0, 0, 0.12);
-  border: solid 1px #e2e2e2;*/
-  
   border: solid 2px #54314e;
   border-radius: 50%;
   position: relative;
@@ -31,7 +27,7 @@
   width: 12px;
   height: 12px;
   background-color: #54314e;
-  border: solid 1px #54314e;
+  border: solid 2px #54314e;
   border-radius: 50%;
   position: absolute;
   margin-left: 25%;
@@ -44,13 +40,6 @@
 }
 
 .radioButton.checked.disabled .oval .oval {
-  width: 12px;
-  height: 12px;
   background-color: #e2e2e2;
-  border: solid 1px #e2e2e2;
-  border-radius: 50%;
-  position: absolute;
-  margin-left: 25%;
-  margin-top: 25%;
-  display: block;
+  border: solid 2px #e2e2e2;
 }
