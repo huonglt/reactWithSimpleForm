@@ -7,6 +7,8 @@ import CountryOfTaxResidenceInfoContainer from '../containers/CountryOfTaxReside
 import { COUNTRY_LIST, MIN_COUNTRY_OF_RESIDENCE, MAX_COUNTRY_OF_RESIDENCE } from '../data/constants';
 import { TAX_INFO_OF_COUNTRIES } from '../data/mock';
 import RadioGroup from './RadioGroup';
+import TestRadio from './TestRadio';
+import TestRadioGroup from './TestRadioGroup';
 
 export default class App extends React.Component {
   render() {
@@ -22,6 +24,8 @@ export default class App extends React.Component {
         <section>
           <RadioGroup items={items2} defaultValue="True" disabled/>
         </section>
+        <TestRadioGroup items={items1} value="Yes"/>
+        <TestRadio label="Single One" value="Single" disabled={true} />
       </div>
     );
   }
