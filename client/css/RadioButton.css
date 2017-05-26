@@ -1,8 +1,8 @@
-.radioButton {
+.radio {
   min-width: 80px;
   overflow-x: hidden;
 }
-.radioButton .oval {
+.radio .oval {
   width: 30px;
   height: 30px;
   background-color: #ffffff;
@@ -10,20 +10,20 @@
   border-radius: 50%;
   position: relative;
 }
-.radioButton .label {
+.radio .label {
   position: relative;
   left: 35px;
   top: 4px;
   height: 30px;
 }
-.radioButton .oval .oval{
+.radio .oval .oval{
   display: none;
 }
-.radioButton.checked .oval {
+.radio.checked .oval {
   border: solid 2px #54314e;
 }
 
-.radioButton.checked .oval .oval {
+.radio.checked .oval .oval {
   width: 12px;
   height: 12px;
   background-color: #54314e;
@@ -35,11 +35,11 @@
   display: block;
 }
 
-.radioButton.disabled .oval {
+.radio.disabled .oval {
   border: solid 2px #e2e2e2;
 }
 
-.radioButton.checked.disabled .oval .oval {
+.radio.checked.disabled .oval .oval {
   background-color: #e2e2e2;
   border: solid 2px #e2e2e2;
 }

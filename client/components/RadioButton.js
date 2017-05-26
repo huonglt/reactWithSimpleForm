@@ -14,7 +14,7 @@ export default class RadioButton extends React.Component {
   render() {
     const disabled = (this.props.disabled) ? styles.disabled : '';
     const checked = (this.props.checked) ? styles.checked : '';
-    const radioButton = styles.radioButton + ' ' + checked + ' ' + disabled;
+    const radioButton = styles.radio + ' ' + checked + ' ' + disabled;
     return (
       <div className={radioButton} onClick={this.handleClick}>
         <div className={styles.oval}>
