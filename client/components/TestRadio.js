@@ -39,11 +39,11 @@ export default class TestRadio extends React.Component {
      * if the radio button is managed through the RadioGroup control, its checked property is determined by its props
      * If the radio button is a stand-alone one, its checked property is determined by its own state
     */
-    const propertyController = (this.props.handleClick) ? this.props : this.state;
+    const checked = (this.props.handleClick) ? this.props.checked : this.state.checked;
 
     return this.cx({
       oval: true,
-      checked: propertyController.checked,
+      checked: checked,
       disabled: this.props.disabled,
     });
   }
