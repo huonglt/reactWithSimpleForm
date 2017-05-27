@@ -8,7 +8,7 @@ export default class TestRadio extends React.Component {
   constructor(props) {
     super(props);
     this.handleClick = this.handleClick.bind(this);
-    this.getRadioButtonStyle = this.getRadioButtonStyle.bind(this);
+    this.getRadioBtnCss = this.getRadioBtnCss.bind(this);
     this.state = { checked: this.props.checked };
   }
   /*
@@ -34,24 +34,20 @@ export default class TestRadio extends React.Component {
    * find the css class for the radio button
    * default, checked, disabled, or combination of checked & disabled, and default & disabled
    */
-  getRadioButtonStyle() {
+  getRadioBtnCss() {
     /*
      * if the radio button is managed through the RadioGroup control, its checked property is determined by its props
      * If the radio button is a stand-alone one, its checked property is determined by its own state
     */
     const checked = (this.props.handleClick) ? this.props.checked : this.state.checked;
-
-    return cx({
-      oval: true,
-      checked: checked,
-      disabled: this.props.disabled,
-    });
+    const disabled = this.props.disabled;
+    return cx('radio', { checked, disabled });
   }
   render() {
-    const radioButton = this.getRadioButtonStyle();
+    const radioBtnCss = this.getRadioBtnCss();
     return (
       <div onClick={this.handleClick} className={styles.container} style={this.props.style}>
-        <div className={radioButton}></div>
+        <div className={radioBtnCss}></div>
         <div className={styles.label}>{this.props.label}</div>
       </div>
     );
