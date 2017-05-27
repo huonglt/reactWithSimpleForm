@@ -1,7 +1,8 @@
 import React from 'react';
 import classNames from 'classnames/bind';
-
 import styles from '../css/TestRadio.css';
+
+const cx = classNames.bind(styles);
 
 export default class TestRadio extends React.Component {
   constructor(props) {
@@ -9,7 +10,6 @@ export default class TestRadio extends React.Component {
     this.handleClick = this.handleClick.bind(this);
     this.getRadioButtonStyle = this.getRadioButtonStyle.bind(this);
     this.state = { checked: this.props.checked };
-    this.cx = classNames.bind(styles);
   }
   /*
    * Handle click event on the radio button or its label
@@ -41,7 +41,7 @@ export default class TestRadio extends React.Component {
     */
     const checked = (this.props.handleClick) ? this.props.checked : this.state.checked;
 
-    return this.cx({
+    return cx({
       oval: true,
       checked: checked,
       disabled: this.props.disabled,
