@@ -1,5 +1,6 @@
 import React from 'react';
 import TestRadio from './TestRadio';
+import styles from '../css/TestRadioGroup.css';
 
 export default class TestRadioGroup extends React.Component {
     constructor(props) {
@@ -21,9 +22,10 @@ export default class TestRadioGroup extends React.Component {
                                           checked={item.value == this.state.value}
                                           disabled={this.props.disabled}/>
       return (
-        <div style={{display: 'flex'}}>
+        <div className={styles.container}>
           {this.props.items.map(makeRadioButton)}
         </div>
+
       );
     }
 }
