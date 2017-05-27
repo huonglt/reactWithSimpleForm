@@ -50,8 +50,8 @@ export default class TestRadio extends React.Component {
   render() {
     const radioButton = this.getRadioButtonStyle();
     return (
-      <div onClick={this.handleClick} className={styles.container}>
-        <div className={radioButton} ></div>
+      <div onClick={this.handleClick} className={styles.container} style={this.props.style}>
+        <div className={radioButton}></div>
         <div className={styles.label}>{this.props.label}</div>
       </div>
     );
