@@ -106,23 +106,25 @@ export default class AutoComplete extends React.Component {
         if(selectedIndex < 0) {
           selectedIndex = 0;
         }
+        this.setState((prevState) => ({ ...prevState, selectedIndex }));
         let domNode = ReactDOM.findDOMNode(this.dropDown);
         //domNode.children[0].children[selectedIndex].scrollIntoView();
         if(!this.isInViewPort(domNode, domNode.children[0].children[selectedIndex])) {
           domNode.children[0].children[selectedIndex].scrollIntoView();
         }
-        this.setState((prevState) => ({ ...prevState, selectedIndex }));
+
     } else if(event.keyCode == KEY_DOWN) {
       let selectedIndex = this.state.selectedIndex + 1;
       if(selectedIndex == this.props.items.length) {
         selectedIndex = this.props.items.length - 1;
       }
+      this.setState((prevState) => ({ ...prevState, selectedIndex }));
       let domNode = ReactDOM.findDOMNode(this.dropDown);
       //domNode.children[0].children[selectedIndex].scrollIntoView();
       if(!this.isInViewPort(domNode, domNode.children[0].children[selectedIndex])) {
         domNode.children[0].children[selectedIndex].scrollIntoView();
       }
-      this.setState((prevState) => ({ ...prevState, selectedIndex }));
+
     }
     this.openSuggestion();
   }
