@@ -14,7 +14,7 @@ export default class AutoComplete extends React.Component {
     this.openSuggestion = this.openSuggestion.bind(this);
     this.closeSuggestion = this.closeSuggestion.bind(this);
     this.toggleSuggestion = this.toggleSuggestion.bind(this);
-    this.handleChange = debounce(this.handleChange.bind(this), 400);
+    this.handleChange = debounce(this.handleChange.bind(this), 300);
     this.setRef = this.setRef.bind(this);
     this.setRefSuggestion = this.setRefSuggestion.bind(this);
     this.handleMouseOver = this.handleMouseOver.bind(this);
@@ -24,6 +24,7 @@ export default class AutoComplete extends React.Component {
     this.isInViewPort = this.isInViewPort.bind(this);
     this.state = { displaySuggestion: false, selectedIndex: -1, selectedItem: '' };
   }
+
   openSuggestion() {
     if(!this.state.displaySuggestion) {
       this.setState((prevState) => ({ ...prevState, displaySuggestion: true }));
@@ -32,9 +33,10 @@ export default class AutoComplete extends React.Component {
   closeSuggestion(event) {
     if(this.state.displaySuggestion) {
       setTimeout(() => {
-          this.setState((prevState) => ({ ...prevState, displaySuggestion: false }));
-      }, 300);
+        this.setState((prevState) => ({ ...prevState, displaySuggestion: false }));
+      }, 200);
     }
+
   }
   toggleSuggestion() {
     this.setState((prevState) => ({ ...prevState, displaySuggestion: !this.state.displaySuggestion }));
@@ -80,7 +82,10 @@ export default class AutoComplete extends React.Component {
   handleSelect(event) {
     const selectedIndex = event.target.value;
     const selectedItem = this.props.items[selectedIndex];
+
     this.input.value = this.props.items[selectedIndex];
+    console.log('closing suggestion on handleSelect');
+    this.closeSuggestion();
     this.setState((prevState) => ({ ...prevState, displaySuggestion: false, selectedIndex, selectedItem }));
   }
   handleKeyPress(event) {
@@ -160,7 +165,8 @@ export default class AutoComplete extends React.Component {
                 onChange={this.handleChange}
                 ref={this.setRef}
                 onKeyPress={this.handleKeyPress}
-                onKeyDown={this.handleKeyDown}/>
+                onKeyDown={this.handleKeyDown}
+                onClick={this.openSuggestion}/>
         </div>
         <div className={cn} ref={this.setRefSuggestion} style={{srollTop: '100px'}}>
           <ul style={{listStyleType:'none'}}>
