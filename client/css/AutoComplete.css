@@ -48,7 +48,7 @@
   position: absolute;
   z-index: 100;
   box-shadow: 5px 5px 5px #888888;
-  
+
   max-height: 210px;
   overflow-x: hidden;
   overflow-y: scroll;
@@ -60,8 +60,12 @@
 .suggestion li {
   line-height: 20px;
   padding: 5px;
+  cursor: pointer;
 }
-
-.suggestion li:hover {
+.suggestion li.highlight {
   background: #e7e7e7;
 }
+/*
+.suggestion li:hover {
+  background: #e7e7e7;
+}*/
