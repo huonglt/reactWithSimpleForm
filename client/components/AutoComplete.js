@@ -19,7 +19,7 @@ export default class AutoComplete extends React.Component {
     this.handleSelect = this.handleSelect.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
-    this.state = { displaySuggestion: false, inputValue: '', selectedIndex: -1 };
+    this.state = { displaySuggestion: false, selectedIndex: -1, selectedItem: '' };
   }
   openSuggestion() {
     if(!this.state.displaySuggestion) {
@@ -30,62 +30,65 @@ export default class AutoComplete extends React.Component {
     if(this.state.displaySuggestion) {
       setTimeout(() => {
           this.setState((prevState) => ({ ...prevState, displaySuggestion: false }));
-      }, 100);
+      }, 300);
     }
   }
   toggleSuggestion() {
-    this.setState((prevState) => ({ displaySuggestion: !this.state.displaySuggestion }));
+    this.setState((prevState) => ({ ...prevState, displaySuggestion: !this.state.displaySuggestion }));
   }
   handleChange() {
-    //console.log('value = ' + this.input.value);
     const value = this.input.value;
+    let selectedItem = '';
+    let selectedIndex = -1;
+    if(value !== '') {
+      selectedItem = this.props.items.find((item) => item.toLowerCase().startsWith(value.toLowerCase()));
+    }
 
-    let foundItem = this.props.items.find((item) => item.toLowerCase().startsWith(value.toLowerCase()));
-    let itemIndex = -1;
-    let selectedValue = '';
-    if(foundItem) {
-      itemIndex = this.props.items.indexOf(foundItem);
+    if(selectedItem) {
+      selectedIndex = this.props.items.indexOf(selectedItem);
       let domNode = ReactDOM.findDOMNode(this.dropDown);
       /*
       domNode.children[0].children[index].scrollIntoView();
       domNode.style.scrollTop = (30 * index) + 'px';*/
 
-      const offsetTop = domNode.children[0].children[itemIndex].offsetTop;
+      const offsetTop = domNode.children[0].children[selectedIndex].offsetTop;
       domNode.scrollTop = offsetTop;
     }
-    this.setState((prevState) => ({ ...prevState, selectedIndex: itemIndex, selectedValue: foundItem}));
+    console.log('handleChange: input value = ' + value + '; selectedItem = ' + selectedItem + '; selectedIndex = ' + selectedIndex);
+    this.setState((prevState) => ({ ...prevState, selectedIndex, selectedItem}));
   }
   setRef(input) {
+    // make this as an uncontrolled element due to using debounce to handleChange
     this.input = input;
   }
-  setRefSuggestion(dd) {
-    this.dropDown = dd;
+  setRefSuggestion(dropDown) {
+    this.dropDown = dropDown;
   }
 
   handleMouseOver(event) {
-
     const selectedIndex = event.target.value;
-    this.setState((prevState) => ({ ...prevState, selectedIndex, selectedValue: this.props.items[selectedIndex] }));
+    const selectedItem = this.props.items[selectedIndex];
+    this.setState((prevState) => ({ ...prevState, selectedIndex, selectedItem }));
   }
 
   handleSelect(event) {
     const selectedIndex = event.target.value;
+    const selectedItem = this.props.items[selectedIndex];
     this.input.value = this.props.items[selectedIndex];
-
-    this.setState((prevState) => ({ ...prevState, displaySuggestion: false, selectedIndex, selectedValue: this.props.items[selectedIndex] }));
-
+    this.setState((prevState) => ({ ...prevState, displaySuggestion: false, selectedIndex, selectedItem }));
   }
   handleKeyPress(event) {
+
     if(event.charCode === 13) {
-      console.log('enter key');
-      this.input.value = this.state.selectedValue || '';
-      this.closeSuggestion();
+      this.input.value = this.state.selectedItem || '';
+      console.log('selectedItem = ' + this.state.selectedItem);
+      if(!this.state.selectedItem || this.state.selectedItem != '') {
+        this.closeSuggestion();
+      }
     }
   }
   handleKeyDown(event) {
-    if(!this.state.displaySuggestion) {
-      this.openSuggestion();
-    }
+    this.openSuggestion();
   }
   render() {
     let cn = cx('suggestion', { 'display': this.state.displaySuggestion });
