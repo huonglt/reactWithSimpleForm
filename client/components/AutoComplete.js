@@ -5,6 +5,8 @@ import classNames from 'classnames/bind';
 import debounce from 'lodash.debounce';
 
 const cx = classNames.bind(styles);
+const KEY_UP = 38;
+const KEY_DOWN = 40;
 
 export default class AutoComplete extends React.Component {
   constructor(props) {
@@ -19,6 +21,7 @@ export default class AutoComplete extends React.Component {
     this.handleSelect = this.handleSelect.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.isInViewPort = this.isInViewPort.bind(this);
     this.state = { displaySuggestion: false, selectedIndex: -1, selectedItem: '' };
   }
   openSuggestion() {
@@ -51,8 +54,11 @@ export default class AutoComplete extends React.Component {
       domNode.children[0].children[index].scrollIntoView();
       domNode.style.scrollTop = (30 * index) + 'px';*/
 
-      const offsetTop = domNode.children[0].children[selectedIndex].offsetTop;
-      domNode.scrollTop = offsetTop;
+      //const offsetTop = domNode.children[0].children[selectedIndex].offsetTop;
+      //domNode.scrollTop = offsetTop;
+      if(!this.isInViewPort(domNode, domNode.children[0].children[selectedIndex])) {
+        domNode.children[0].children[selectedIndex].scrollIntoView();
+      }
     }
     console.log('handleChange: input value = ' + value + '; selectedItem = ' + selectedItem + '; selectedIndex = ' + selectedIndex);
     this.setState((prevState) => ({ ...prevState, selectedIndex, selectedItem}));
@@ -80,15 +86,63 @@ export default class AutoComplete extends React.Component {
   handleKeyPress(event) {
 
     if(event.charCode === 13) {
-      this.input.value = this.state.selectedItem || '';
-      console.log('selectedItem = ' + this.state.selectedItem);
-      if(!this.state.selectedItem || this.state.selectedItem != '') {
+      this.input.value = this.props.items[this.state.selectedIndex] || '';
+
+      if(this.state.selectedIndex != -1) {
         this.closeSuggestion();
       }
     }
   }
   handleKeyDown(event) {
+    console.log('keyPress: keyCode = ' + event.keyCode);
+
+    if(event.keyCode == KEY_UP) {
+        let selectedIndex = this.state.selectedIndex - 1;
+        if(selectedIndex < 0) {
+          selectedIndex = 0;
+        }
+        let domNode = ReactDOM.findDOMNode(this.dropDown);
+        //domNode.children[0].children[selectedIndex].scrollIntoView();
+        if(!this.isInViewPort(domNode, domNode.children[0].children[selectedIndex])) {
+          domNode.children[0].children[selectedIndex].scrollIntoView();
+        }
+        this.setState((prevState) => ({ ...prevState, selectedIndex }));
+    } else if(event.keyCode == KEY_DOWN) {
+      let selectedIndex = this.state.selectedIndex + 1;
+      if(selectedIndex == this.props.items.length) {
+        selectedIndex = this.props.items.length - 1;
+      }
+      let domNode = ReactDOM.findDOMNode(this.dropDown);
+      //domNode.children[0].children[selectedIndex].scrollIntoView();
+      if(!this.isInViewPort(domNode, domNode.children[0].children[selectedIndex])) {
+        domNode.children[0].children[selectedIndex].scrollIntoView();
+      }
+      this.setState((prevState) => ({ ...prevState, selectedIndex }));
+    }
     this.openSuggestion();
+  }
+  isInViewPort(parent, elem) {
+    /*
+    var docViewTop = $(window).scrollTop();
+    var docViewBottom = docViewTop + $(window).height();
+
+    var elemTop = $(elem).offset().top;
+    var elemBottom = elemTop + $(elem).height();
+
+    return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));*/
+
+    let parentTop = parent.scrollTop;
+    //let parentClientHeight = parent.clientHeight;
+    //let parentOffsetHeight = parent.offsetHeight; //offsetHeight includes border
+    let parentBottom = parentTop + parent.offsetHeight;
+
+    let elemTop = elem.offsetTop;
+    let elemBottom = elemTop + elem.offsetHeight;
+    //let parentBottom = parentTop + parent.style.height;
+    //console.log('parentTop = ' + parentTop + ', parentClientHeight = ' + parent.clientHeight + ', parent offsetHeight = ' + parent.offsetHeight);
+    //console.log('elemTop = ' + elemTop + ', elem clientHeight = ' + elem.clientHeight + ', elem offsetHeight = ' + elem.offsetHeight);
+
+    return ((elemBottom <= parentBottom) && (elemTop >= parentTop));
   }
   render() {
     let cn = cx('suggestion', { 'display': this.state.displaySuggestion });
