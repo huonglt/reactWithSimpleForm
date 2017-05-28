@@ -5,10 +5,11 @@ import Gatca from './Gatca';
 import SelectCountryOfTaxResidenceContainer from '../containers/SelectCountryOfTaxResidenceContainer';
 import CountryOfTaxResidenceInfoContainer from '../containers/CountryOfTaxResidenceInfoContainer';
 import { COUNTRY_LIST, MIN_COUNTRY_OF_RESIDENCE, MAX_COUNTRY_OF_RESIDENCE } from '../data/constants';
-import { TAX_INFO_OF_COUNTRIES } from '../data/mock';
+import { TAX_INFO_OF_COUNTRIES, COUNTRIES } from '../data/mock';
 import RadioGroup from './RadioGroup';
 import TestRadio from './TestRadio';
 import TestRadioGroup from './TestRadioGroup';
+import AutoComplete from './AutoComplete';
 
 export default class App extends React.Component {
   render() {
@@ -25,7 +26,10 @@ export default class App extends React.Component {
           <RadioGroup items={items2} defaultValue="True" disabled/>
         </section>
         <TestRadioGroup items={items1} value="Yes"/>
-        <TestRadio label="Single One" value="Single" disabled={true} />
+        <TestRadio label="Single One" value="Single"/>
+        <SelectCountryOfTaxResidenceContainer taxInfoOfCountries={TAX_INFO_OF_COUNTRIES}/>
+        <AutoComplete items={COUNTRIES}/>
+
       </div>
     );
   }

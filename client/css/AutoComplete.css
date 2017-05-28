@@ -1,0 +1,67 @@
+.input {
+  border: none;
+  background: #e7e7e7;
+  width: 240px;
+  height: 100%;
+  outline: none;
+  padding-right: 5px;
+}
+.input::-webkit-contacts-auto-fill-button {
+  visibility: hidden;
+  display: none !important;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+}
+.dropdown {
+  width: 280px;
+  height: 40px;
+  border-radius: 3px;
+  background-color: #e7e7e7;
+  border: solid 1px #cecece;
+  padding-left: 5px;
+  padding-right: 5px;
+  position: relative;
+}
+
+.dropdown::after {
+  position: absolute;
+  top: 50%;
+  right: .8rem;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  content: "";
+  border-top: .54857rem solid rgba(0, 0, 0, .12);
+  border-right: .54857rem solid transparent;
+  border-left: .54857rem solid transparent;
+  -webkit-transition: -webkit-transform .35s cubic-bezier(.4, 0, .2, 1);
+  transition: -webkit-transform .35s cubic-bezier(.4, 0, .2, 1);
+  transition: transform .35s cubic-bezier(.4, 0, .2, 1);
+  transition: transform .35s cubic-bezier(.4, 0, .2, 1);
+}
+.suggestion {
+  background-color: #fff;
+  width: 280px;
+  border: solid 1px #cecece;
+  border-radius: 3px;
+  position: absolute;
+  z-index: 100;
+  box-shadow: 5px 5px 5px #888888;
+  
+  max-height: 210px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  display: none;
+}
+.suggestion.display {
+  display: block;
+}
+.suggestion li {
+  line-height: 20px;
+  padding: 5px;
+}
+
+.suggestion li:hover {
+  background: #e7e7e7;
+}
