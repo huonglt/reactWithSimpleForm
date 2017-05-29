@@ -133,7 +133,8 @@ export default class AutoComplete extends React.Component {
     let domNode = ReactDOM.findDOMNode(this.dropDown);
 
     if(!this.isInViewPort(domNode, domNode.children[0].children[index])) {
-      domNode.children[0].children[index].scrollIntoView();
+      //domNode.children[0].children[index].scrollIntoView();
+      domNode.scrollTop = domNode.children[0].children[index].offsetTop;
     }
   }
   render() {
