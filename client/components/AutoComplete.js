@@ -8,6 +8,7 @@ const cx = classNames.bind(styles);
 const KEY_UP = 38;
 const KEY_DOWN = 40;
 const KEY_ENTER = 13;
+const KEY_ESCAPE = 27;
 
 export default class AutoComplete extends React.Component {
   constructor(props) {
@@ -23,8 +24,8 @@ export default class AutoComplete extends React.Component {
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.isInViewPort = this.isInViewPort.bind(this);
-    this.scrollToSuggestionItemIfNeeded = this.scrollToSuggestionItemIfNeeded.bind(this);
-    this.state = { displaySuggestion: false, selectedIndex: -1, selectedItem: ''};
+    this.scrollDropDownIfNeeded = this.scrollDropDownIfNeeded.bind(this);
+    this.state = { displaySuggestion: false, selectedIndex: -1};
   }
 
   openSuggestion() {
@@ -45,22 +46,20 @@ export default class AutoComplete extends React.Component {
   }
   handleChange() {
     const value = this.input.value;
-    let selectedItem = '';
+    let foundItem = null;
     let selectedIndex = -1;
     if(value !== '') {
-      selectedItem = this.props.items.find((item) => item.toLowerCase().startsWith(value.toLowerCase()));
+      foundItem = this.props.items.find((item) => item.toLowerCase().startsWith(value.toLowerCase()));
     }
+    if(foundItem) {
+      selectedIndex = this.props.items.indexOf(foundItem);
 
-    if(selectedItem) {
-      selectedIndex = this.props.items.indexOf(selectedItem);
-
-      //const offsetTop = domNode.children[0].children[selectedIndex].offsetTop;
-      //domNode.scrollTop = offsetTop;
-
-      this.setState((prevState) => ({ ...prevState, selectedIndex, selectedItem}));
-      this.scrollToSuggestionItemIfNeeded(selectedIndex);
+      this.setState((prevState) => ({ ...prevState, selectedIndex}));
+      this.scrollDropDownIfNeeded(selectedIndex);
     } else {
-      this.setState((prevState) => ({ ...prevState, selectedIndex, selectedItem}));
+      this.setState((prevState) => ({ ...prevState, selectedIndex}));
+      // scroll to the top if no matching found
+      this.scrollDropDownIfNeeded(0);
     }
 
   }
@@ -74,27 +73,19 @@ export default class AutoComplete extends React.Component {
 
   handleMouseOver(event) {
     const selectedIndex = event.target.value;
-    const selectedItem = this.props.items[selectedIndex];
-
-    this.setState((prevState) => ({ ...prevState, selectedIndex, selectedItem }));
+    this.setState((prevState) => ({ ...prevState, selectedIndex }));
   }
 
   handleSelect(event) {
     const selectedIndex = event.target.value;
-    const selectedItem = this.props.items[selectedIndex];
-
     this.input.value = this.props.items[selectedIndex];
-    console.log('closing suggestion on handleSelect');
     this.closeSuggestion();
-    this.setState((prevState) => ({ ...prevState, displaySuggestion: false, selectedIndex, selectedItem}));
+    this.setState((prevState) => ({ ...prevState, displaySuggestion: false, selectedIndex}));
   }
   handleKeyPress(event) {
     if(event.charCode == KEY_ENTER) {
       this.input.value = this.props.items[this.state.selectedIndex] || '';
-
-      if(this.state.selectedIndex != -1) {
-        this.toggleSuggestion();
-      }
+      this.toggleSuggestion();
     }
   }
   handleKeyDown(event) {
@@ -106,7 +97,7 @@ export default class AutoComplete extends React.Component {
           selectedIndex = 0;
         }
         this.setState((prevState) => ({ ...prevState, selectedIndex }));
-        this.scrollToSuggestionItemIfNeeded(selectedIndex);
+        this.scrollDropDownIfNeeded(selectedIndex);
 
     } else if(event.keyCode == KEY_DOWN) {
       let selectedIndex = this.state.selectedIndex + 1;
@@ -114,10 +105,11 @@ export default class AutoComplete extends React.Component {
         selectedIndex = this.props.items.length - 1;
       }
       this.setState((prevState) => ({ ...prevState, selectedIndex }));
-      this.scrollToSuggestionItemIfNeeded(selectedIndex);
-
+      this.scrollDropDownIfNeeded(selectedIndex);
+    } else if(event.keyCode == KEY_ESCAPE) {
+      this.closeSuggestion();
     } else if(event.keyCode != KEY_ENTER) {
-        this.openSuggestion();
+      this.openSuggestion();
     }
   }
   isInViewPort(parent, elem) {
@@ -129,7 +121,7 @@ export default class AutoComplete extends React.Component {
     let elemBottom = elemTop + elem.offsetHeight;
     return ((elemBottom <= parentBottom) && (elemTop >= parentTop));
   }
-  scrollToSuggestionItemIfNeeded(index) {
+  scrollDropDownIfNeeded(index) {
     let domNode = ReactDOM.findDOMNode(this.dropDown);
 
     if(!this.isInViewPort(domNode, domNode.children[0].children[index])) {
@@ -154,7 +146,7 @@ export default class AutoComplete extends React.Component {
                 ref={this.setRef}
                 onKeyPress={this.handleKeyPress}
                 onKeyDown={this.handleKeyDown}
-                onClick={this.openSuggestion}/>
+                onClick={this.openSuggestion} autoComplete="off"/>
         </div>
         <div className={cn} ref={this.setRefSuggestion}>
           <ul style={{listStyleType:'none'}}>
