@@ -51,6 +51,7 @@
   overflow-x: hidden;
   overflow-y: scroll;
   display: none;
+  border-top-width: 0;
 }
 .suggestion.display {
   display: block;
