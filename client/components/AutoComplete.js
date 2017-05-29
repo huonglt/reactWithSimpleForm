@@ -169,7 +169,7 @@ export default class AutoComplete extends React.Component {
           </ul>
         </div>
         <div style={{height:'200px'}}>
-          Some dummy here
+          Some dummy here 
         </div>
       </div>
     );
