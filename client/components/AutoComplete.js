@@ -7,6 +7,7 @@ import debounce from 'lodash.debounce';
 const cx = classNames.bind(styles);
 const KEY_UP = 38;
 const KEY_DOWN = 40;
+const KEY_ENTER = 13;
 
 export default class AutoComplete extends React.Component {
   constructor(props) {
@@ -53,18 +54,12 @@ export default class AutoComplete extends React.Component {
     if(selectedItem) {
       selectedIndex = this.props.items.indexOf(selectedItem);
 
-      /*
-      domNode.children[0].children[index].scrollIntoView();
-      domNode.style.scrollTop = (30 * index) + 'px';*/
-
       //const offsetTop = domNode.children[0].children[selectedIndex].offsetTop;
       //domNode.scrollTop = offsetTop;
-      console.log('handleChange: input value = ' + value + '; selectedItem = ' + selectedItem + '; selectedIndex = ' + selectedIndex);
-      this.setState((prevState) => ({ ...prevState, selectedIndex, selectedItem}));
 
+      this.setState((prevState) => ({ ...prevState, selectedIndex, selectedItem}));
       this.scrollToSuggestionItemIfNeeded(selectedIndex);
     } else {
-      console.log('handleChange: input value = ' + value + '; selectedItem = ' + selectedItem + '; selectedIndex = ' + selectedIndex);
       this.setState((prevState) => ({ ...prevState, selectedIndex, selectedItem}));
     }
 
@@ -94,8 +89,7 @@ export default class AutoComplete extends React.Component {
     this.setState((prevState) => ({ ...prevState, displaySuggestion: false, selectedIndex, selectedItem}));
   }
   handleKeyPress(event) {
-
-    if(event.charCode === 13) {
+    if(event.charCode == KEY_ENTER) {
       this.input.value = this.props.items[this.state.selectedIndex] || '';
 
       if(this.state.selectedIndex != -1) {
@@ -122,11 +116,9 @@ export default class AutoComplete extends React.Component {
       this.setState((prevState) => ({ ...prevState, selectedIndex }));
       this.scrollToSuggestionItemIfNeeded(selectedIndex);
 
-    } else if(event.keyCode != 13) {
+    } else if(event.keyCode != KEY_ENTER) {
         this.openSuggestion();
     }
-
-
   }
   isInViewPort(parent, elem) {
     let parentTop = parent.scrollTop;
