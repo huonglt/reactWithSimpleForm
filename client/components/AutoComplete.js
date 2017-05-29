@@ -163,13 +163,13 @@ export default class AutoComplete extends React.Component {
                 onKeyDown={this.handleKeyDown}
                 onClick={this.openSuggestion}/>
         </div>
-        <div className={cn} ref={this.setRefSuggestion} style={{srollTop: '100px'}}>
+        <div className={cn} ref={this.setRefSuggestion}>
           <ul style={{listStyleType:'none'}}>
             {this.props.items.map(makeLi)}
           </ul>
         </div>
         <div style={{height:'200px'}}>
-          Some dummy here 
+          Some dummy here. Feel free to remove
         </div>
       </div>
     );
