@@ -22,7 +22,8 @@ export default class AutoComplete extends React.Component {
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.isInViewPort = this.isInViewPort.bind(this);
-    this.state = { displaySuggestion: false, selectedIndex: -1, selectedItem: '' };
+    this.scrollToSuggestionItemIfNeeded = this.scrollToSuggestionItemIfNeeded.bind(this);
+    this.state = { displaySuggestion: false, selectedIndex: -1, selectedItem: ''};
   }
 
   openSuggestion() {
@@ -51,19 +52,22 @@ export default class AutoComplete extends React.Component {
 
     if(selectedItem) {
       selectedIndex = this.props.items.indexOf(selectedItem);
-      let domNode = ReactDOM.findDOMNode(this.dropDown);
+
       /*
       domNode.children[0].children[index].scrollIntoView();
       domNode.style.scrollTop = (30 * index) + 'px';*/
 
       //const offsetTop = domNode.children[0].children[selectedIndex].offsetTop;
       //domNode.scrollTop = offsetTop;
-      if(!this.isInViewPort(domNode, domNode.children[0].children[selectedIndex])) {
-        domNode.children[0].children[selectedIndex].scrollIntoView();
-      }
+      console.log('handleChange: input value = ' + value + '; selectedItem = ' + selectedItem + '; selectedIndex = ' + selectedIndex);
+      this.setState((prevState) => ({ ...prevState, selectedIndex, selectedItem}));
+
+      this.scrollToSuggestionItemIfNeeded(selectedIndex);
+    } else {
+      console.log('handleChange: input value = ' + value + '; selectedItem = ' + selectedItem + '; selectedIndex = ' + selectedIndex);
+      this.setState((prevState) => ({ ...prevState, selectedIndex, selectedItem}));
     }
-    console.log('handleChange: input value = ' + value + '; selectedItem = ' + selectedItem + '; selectedIndex = ' + selectedIndex);
-    this.setState((prevState) => ({ ...prevState, selectedIndex, selectedItem}));
+
   }
   setRef(input) {
     // make this as an uncontrolled element due to using debounce to handleChange
@@ -76,6 +80,7 @@ export default class AutoComplete extends React.Component {
   handleMouseOver(event) {
     const selectedIndex = event.target.value;
     const selectedItem = this.props.items[selectedIndex];
+
     this.setState((prevState) => ({ ...prevState, selectedIndex, selectedItem }));
   }
 
@@ -86,7 +91,7 @@ export default class AutoComplete extends React.Component {
     this.input.value = this.props.items[selectedIndex];
     console.log('closing suggestion on handleSelect');
     this.closeSuggestion();
-    this.setState((prevState) => ({ ...prevState, displaySuggestion: false, selectedIndex, selectedItem }));
+    this.setState((prevState) => ({ ...prevState, displaySuggestion: false, selectedIndex, selectedItem}));
   }
   handleKeyPress(event) {
 
@@ -94,12 +99,12 @@ export default class AutoComplete extends React.Component {
       this.input.value = this.props.items[this.state.selectedIndex] || '';
 
       if(this.state.selectedIndex != -1) {
-        this.closeSuggestion();
+        this.toggleSuggestion();
       }
     }
   }
   handleKeyDown(event) {
-    console.log('keyPress: keyCode = ' + event.keyCode);
+    console.log('keyDown: keyCode = ' + event.keyCode);
 
     if(event.keyCode == KEY_UP) {
         let selectedIndex = this.state.selectedIndex - 1;
@@ -107,11 +112,7 @@ export default class AutoComplete extends React.Component {
           selectedIndex = 0;
         }
         this.setState((prevState) => ({ ...prevState, selectedIndex }));
-        let domNode = ReactDOM.findDOMNode(this.dropDown);
-        //domNode.children[0].children[selectedIndex].scrollIntoView();
-        if(!this.isInViewPort(domNode, domNode.children[0].children[selectedIndex])) {
-          domNode.children[0].children[selectedIndex].scrollIntoView();
-        }
+        this.scrollToSuggestionItemIfNeeded(selectedIndex);
 
     } else if(event.keyCode == KEY_DOWN) {
       let selectedIndex = this.state.selectedIndex + 1;
@@ -119,37 +120,29 @@ export default class AutoComplete extends React.Component {
         selectedIndex = this.props.items.length - 1;
       }
       this.setState((prevState) => ({ ...prevState, selectedIndex }));
-      let domNode = ReactDOM.findDOMNode(this.dropDown);
-      //domNode.children[0].children[selectedIndex].scrollIntoView();
-      if(!this.isInViewPort(domNode, domNode.children[0].children[selectedIndex])) {
-        domNode.children[0].children[selectedIndex].scrollIntoView();
-      }
+      this.scrollToSuggestionItemIfNeeded(selectedIndex);
 
+    } else if(event.keyCode != 13) {
+        this.openSuggestion();
     }
-    this.openSuggestion();
+
+
   }
   isInViewPort(parent, elem) {
-    /*
-    var docViewTop = $(window).scrollTop();
-    var docViewBottom = docViewTop + $(window).height();
-
-    var elemTop = $(elem).offset().top;
-    var elemBottom = elemTop + $(elem).height();
-
-    return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));*/
-
     let parentTop = parent.scrollTop;
-    //let parentClientHeight = parent.clientHeight;
-    //let parentOffsetHeight = parent.offsetHeight; //offsetHeight includes border
+    // use offsetHeight to include border (clientHeight is without border)
     let parentBottom = parentTop + parent.offsetHeight;
 
     let elemTop = elem.offsetTop;
     let elemBottom = elemTop + elem.offsetHeight;
-    //let parentBottom = parentTop + parent.style.height;
-    //console.log('parentTop = ' + parentTop + ', parentClientHeight = ' + parent.clientHeight + ', parent offsetHeight = ' + parent.offsetHeight);
-    //console.log('elemTop = ' + elemTop + ', elem clientHeight = ' + elem.clientHeight + ', elem offsetHeight = ' + elem.offsetHeight);
-
     return ((elemBottom <= parentBottom) && (elemTop >= parentTop));
+  }
+  scrollToSuggestionItemIfNeeded(index) {
+    let domNode = ReactDOM.findDOMNode(this.dropDown);
+
+    if(!this.isInViewPort(domNode, domNode.children[0].children[index])) {
+      domNode.children[0].children[index].scrollIntoView();
+    }
   }
   render() {
     let cn = cx('suggestion', { 'display': this.state.displaySuggestion });
