@@ -16,39 +16,39 @@ export default class AutoComplete extends React.Component {
     this.handleKeyUp = this.handleKeyUp.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.clickOutside = this.clickOutside.bind(this);
-    this.openSuggestion = this.openSuggestion.bind(this);
-    this.closeSuggestion = this.closeSuggestion.bind(this);
-    this.toggleSuggestion = this.toggleSuggestion.bind(this);
+    this.showDropDown = this.showDropDown.bind(this);
+    this.hideDropDown = this.hideDropDown.bind(this);
+    this.toggleDropDown = this.toggleDropDown.bind(this);
     this.handleChange = debounce(this.handleChange.bind(this), 200);
     this.handleMouseOver = this.handleMouseOver.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
     this.isInViewPort = this.isInViewPort.bind(this);
     this.scrollToElem = this.scrollToElem.bind(this);
-    this.state = {displaySuggestion: false, selectedIndex: -1};
+    this.state = {show: false, selectedIndex: -1};
     this.valueItems = this.props.items.map((item) => item.toLowerCase());
   }
 
   clickOutside(event) {
     if(event.target != this.input) {
-      this.closeSuggestion();
+      this.hideDropDown();
     }
   }
   handleClick(event) {
     event.nativeEvent.stopPropagation();
-    this.openSuggestion();
+    this.showDropDown();
   }
-  openSuggestion(event) {
-    if(!this.state.displaySuggestion) {
-      this.setState({displaySuggestion: true});
+  showDropDown(event) {
+    if(!this.state.show) {
+      this.setState({show: true});
     }
   }
-  closeSuggestion(event) {
-    if(this.state.displaySuggestion) {
-      this.setState({displaySuggestion: false});
+  hideDropDown(event) {
+    if(this.state.show) {
+      this.setState({show: false});
     }
   }
-  toggleSuggestion() {
-    this.setState({displaySuggestion: !this.state.displaySuggestion});
+  toggleDropDown() {
+    this.setState({show: !this.state.show});
   }
   handleChange() {
     const value = this.input.value.toLowerCase();
@@ -74,7 +74,7 @@ export default class AutoComplete extends React.Component {
   handleSelect(event) {
     const selectedIndex = event.target.getAttribute("key");
     this.input.value = this.props.items[selectedIndex];
-    this.setState({displaySuggestion: false, selectedIndex});
+    this.setState({show: false, selectedIndex});
   }
 
   handleKeyUp(event) {
@@ -95,12 +95,12 @@ export default class AutoComplete extends React.Component {
       this.setState({selectedIndex});
       this.scrollToElem(selectedIndex);
     } else if(keyCode === KEY_ESCAPE) {
-      this.closeSuggestion();
+      this.hideDropDown();
     } else if(event.keyCode == KEY_ENTER) {
       this.input.value = this.props.items[this.state.selectedIndex] || '';
-      this.toggleSuggestion();
+      this.toggleDropDown();
     } else {
-      this.openSuggestion();
+      this.showDropDown();
     }
   }
   isInViewPort(parent, elem) {
@@ -127,24 +127,24 @@ export default class AutoComplete extends React.Component {
     document.removeEventListener('click', this.clickOutside);
   }
   render() {
-    let cnSuggestionList = cx('suggestion', { 'display': this.state.displaySuggestion });
+    let dropDownListCss = cx('dropdownList', { 'show': this.state.show });
 
-    const makeSuggestionItem = (item, index) => {
-        let cnSuggestionItem = cx({'highlight': index == this.state.selectedIndex});
-        return (<div key={index} className={cnSuggestionItem} onClick={this.handleSelect} onMouseOver={this.handleMouseOver}>{item}</div>);
+    const createDropDownItem = (item, index) => {
+        let dropDownItemCss = cx({'highlight': index == this.state.selectedIndex});
+        return (<div key={index} className={dropDownItemCss} onClick={this.handleSelect} onMouseOver={this.handleMouseOver}>{item}</div>);
     };
     return (
       <div style={{marginTop:'10px'}}>
         <div className={styles.dropdown}>
           <input type="text" className={styles.input} autoComplete="off" spellCheck="false"
-                onFocus={this.openSuggestion}
+                onFocus={this.showDropDown}
                 onChange={this.handleChange}
                 ref={(input) => this.input = input}
                 onKeyUp={this.handleKeyUp}
-                onClick={this.handleClick} autoComplete="off"/>
+                onClick={this.handleClick}/>
         </div>
-        <div className={cnSuggestionList} ref={(input) => this.dropDown = input}>
-            {this.props.items.map(makeSuggestionItem)}
+        <div className={dropDownListCss} ref={(input) => this.dropDown = input}>
+            {this.props.items.map(createDropDownItem)}
         </div>
       </div>
     );
