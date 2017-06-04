@@ -66,12 +66,12 @@ export default class AutoComplete extends React.Component {
   }
 
   handleMouseOver(event) {
-    const selectedIndex = event.target.getAttribute("key");
+    const selectedIndex = event.target.getAttribute("value");
     this.setState({selectedIndex});
   }
 
   handleSelect(event) {
-    const selectedIndex = event.target.getAttribute("key");
+    const selectedIndex = event.target.getAttribute("value");
     this.input.value = this.props.items[selectedIndex];
     this.setState({show: false, selectedIndex});
   }
@@ -128,7 +128,7 @@ export default class AutoComplete extends React.Component {
 
     const createDropDownItem = (item, index) => {
         let dropDownItemCss = cx({'highlight': index == this.state.selectedIndex});
-        return (<div key={index}
+        return (<div key={index} value={index}
                     className={dropDownItemCss}
                     onClick={this.handleSelect}
                     onMouseOver={this.handleMouseOver}>{item}</div>);
