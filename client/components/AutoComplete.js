@@ -24,7 +24,7 @@ export default class AutoComplete extends React.Component {
     this.handleSelect = this.handleSelect.bind(this);
     this.isInViewPort = this.isInViewPort.bind(this);
     this.scrollToElem = this.scrollToElem.bind(this);
-    this.state = { displaySuggestion: false, selectedIndex: -1};
+    this.state = {displaySuggestion: false, selectedIndex: -1};
     this.valueItems = this.props.items.map((item) => item.toLowerCase());
   }
 
@@ -67,12 +67,12 @@ export default class AutoComplete extends React.Component {
   }
 
   handleMouseOver(event) {
-    const selectedIndex = event.target.getAttribute("value");
+    const selectedIndex = event.target.getAttribute("key");
     this.setState({selectedIndex});
   }
 
   handleSelect(event) {
-    const selectedIndex = event.target.getAttribute("value");
+    const selectedIndex = event.target.getAttribute("key");
     this.input.value = this.props.items[selectedIndex];
     this.setState({displaySuggestion: false, selectedIndex});
   }
@@ -131,7 +131,7 @@ export default class AutoComplete extends React.Component {
 
     const makeSuggestionItem = (item, index) => {
         let cnSuggestionItem = cx({'highlight': index == this.state.selectedIndex});
-        return (<div key={index} value={index} className={cnSuggestionItem} onClick={this.handleSelect} onMouseOver={this.handleMouseOver}>{item}</div>);
+        return (<div key={index} className={cnSuggestionItem} onClick={this.handleSelect} onMouseOver={this.handleMouseOver}>{item}</div>);
     };
     return (
       <div style={{marginTop:'10px'}}>
