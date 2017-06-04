@@ -66,12 +66,12 @@ export default class AutoComplete extends React.Component {
   }
 
   handleMouseOver(event) {
-    const selectedIndex = event.target.getAttribute("value");
+    const selectedIndex = parseInt(event.target.getAttribute("value"));
     this.setState({selectedIndex});
   }
 
   handleSelect(event) {
-    const selectedIndex = event.target.getAttribute("value");
+    const selectedIndex = parseInt(event.target.getAttribute("value"));
     this.input.value = this.props.items[selectedIndex];
     this.setState({show: false, selectedIndex});
   }
@@ -79,14 +79,14 @@ export default class AutoComplete extends React.Component {
   handleKeyUp(event) {
     const keyCode = event.keyCode;
     if(keyCode === KEY_UP) {
-        let selectedIndex = parseInt(this.state.selectedIndex) - 1;
+        let selectedIndex = this.state.selectedIndex - 1;
         if(selectedIndex < 0) {
           selectedIndex = 0;
         }
         this.scrollTo(selectedIndex);
         this.setState({selectedIndex});
     } else if(keyCode === KEY_DOWN) {
-      let selectedIndex = parseInt(this.state.selectedIndex) + 1;
+      let selectedIndex = this.state.selectedIndex + 1;
       if(selectedIndex == this.props.items.length) {
         selectedIndex = this.props.items.length - 1;
       }
@@ -94,7 +94,7 @@ export default class AutoComplete extends React.Component {
       this.setState({selectedIndex});
     } else if(keyCode === KEY_ESCAPE) {
       this.hideDropDown();
-    } else if(event.keyCode == KEY_ENTER) {
+    } else if(event.keyCode === KEY_ENTER) {
       this.input.value = this.props.items[this.state.selectedIndex] || '';
       this.toggleDropDown();
     } else {
@@ -124,7 +124,7 @@ export default class AutoComplete extends React.Component {
     document.removeEventListener('click', this.clickOutside);
   }
   render() {
-    let dropDownListCss = cx('dropdownList', { 'show': this.state.show });
+    let dropDownListCss = cx('dropdownList', {'show': this.state.show});
 
     const createDropDownItem = (item, index) => {
         let dropDownItemCss = cx({'highlight': index == this.state.selectedIndex});
