@@ -23,7 +23,7 @@ export default class AutoComplete extends React.Component {
     this.handleMouseOver = this.handleMouseOver.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
     this.isInViewPort = this.isInViewPort.bind(this);
-    this.scrollToElem = this.scrollToElem.bind(this);
+    this.scrollTo = this.scrollTo.bind(this);
     this.state = {show: false, selectedIndex: -1};
     this.valueItems = this.props.items.map((item) => item.toLowerCase());
   }
@@ -34,7 +34,6 @@ export default class AutoComplete extends React.Component {
     }
   }
   handleClick(event) {
-    event.nativeEvent.stopPropagation();
     this.showDropDown();
   }
   showDropDown(event) {
@@ -54,16 +53,16 @@ export default class AutoComplete extends React.Component {
     const value = this.input.value.toLowerCase();
     let selectedIndex = -1;
     if(value !== '') {
+      // find index of the first item that match the value
       selectedIndex = this.valueItems.findIndex((item) => item.startsWith(value));
     }
     if(selectedIndex > -1) {
-      this.setState({selectedIndex});
-      this.scrollToElem(selectedIndex);
+      this.scrollTo(selectedIndex);
     } else {
-      this.setState({selectedIndex});
       // scroll to the top if no matching found
-      this.scrollToElem(0);
+      this.scrollTo(0);
     }
+    this.setState({selectedIndex});
   }
 
   handleMouseOver(event) {
@@ -84,16 +83,15 @@ export default class AutoComplete extends React.Component {
         if(selectedIndex < 0) {
           selectedIndex = 0;
         }
+        this.scrollTo(selectedIndex);
         this.setState({selectedIndex});
-        this.scrollToElem(selectedIndex);
-
     } else if(keyCode === KEY_DOWN) {
       let selectedIndex = parseInt(this.state.selectedIndex) + 1;
       if(selectedIndex == this.props.items.length) {
         selectedIndex = this.props.items.length - 1;
       }
+      this.scrollTo(selectedIndex);
       this.setState({selectedIndex});
-      this.scrollToElem(selectedIndex);
     } else if(keyCode === KEY_ESCAPE) {
       this.hideDropDown();
     } else if(event.keyCode == KEY_ENTER) {
@@ -112,9 +110,8 @@ export default class AutoComplete extends React.Component {
     let elemBottom = elemTop + elem.offsetHeight;
     return ((elemBottom <= parentBottom) && (elemTop >= parentTop));
   }
-  scrollToElem(index) {
+  scrollTo(index) {
     let domNode = ReactDOM.findDOMNode(this.dropDown);
-
     if(!this.isInViewPort(domNode, domNode.children[index])) {
       //domNode.children[index].scrollIntoView();
       domNode.scrollTop = domNode.children[index].offsetTop;
@@ -131,11 +128,14 @@ export default class AutoComplete extends React.Component {
 
     const createDropDownItem = (item, index) => {
         let dropDownItemCss = cx({'highlight': index == this.state.selectedIndex});
-        return (<div key={index} className={dropDownItemCss} onClick={this.handleSelect} onMouseOver={this.handleMouseOver}>{item}</div>);
+        return (<div key={index}
+                    className={dropDownItemCss}
+                    onClick={this.handleSelect}
+                    onMouseOver={this.handleMouseOver}>{item}</div>);
     };
     return (
-      <div style={{marginTop:'10px'}}>
-        <div className={styles.dropdown}>
+      <div style={this.props.style}>
+        <div className={styles.dropdownInput}>
           <input type="text" className={styles.input} autoComplete="off" spellCheck="false"
                 onFocus={this.showDropDown}
                 onChange={this.handleChange}
