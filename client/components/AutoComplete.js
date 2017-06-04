@@ -42,16 +42,16 @@ export default class AutoComplete extends React.Component {
   }
   openSuggestion(event) {
     if(!this.state.displaySuggestion) {
-      this.setState((prevState) => ({ ...prevState, displaySuggestion: true }));
+      this.setState({displaySuggestion: true});
     }
   }
   closeSuggestion(event) {
     if(this.state.displaySuggestion) {
-      this.setState((prevState) => ({ ...prevState, displaySuggestion: false }));
+      this.setState({displaySuggestion: false});
     }
   }
   toggleSuggestion() {
-    this.setState((prevState) => ({ ...prevState, displaySuggestion: !this.state.displaySuggestion }));
+    this.setState({displaySuggestion: !this.state.displaySuggestion});
   }
   handleChange() {
     const value = this.input.value.toLowerCase();
@@ -60,10 +60,10 @@ export default class AutoComplete extends React.Component {
       selectedIndex = this.valueItems.findIndex((item) => item.startsWith(value));
     }
     if(selectedIndex > -1) {
-      this.setState((prevState) => ({ ...prevState, selectedIndex}));
+      this.setState({selectedIndex});
       this.scrollDropDownIfNeeded(selectedIndex);
     } else {
-      this.setState((prevState) => ({ ...prevState, selectedIndex}));
+      this.setState({selectedIndex});
       // scroll to the top if no matching found
       this.scrollDropDownIfNeeded(0);
     }
@@ -79,13 +79,13 @@ export default class AutoComplete extends React.Component {
 
   handleMouseOver(event) {
     const selectedIndex = event.target.getAttribute("value");
-    this.setState((prevState) => ({ ...prevState, selectedIndex }));
+    this.setState({selectedIndex});
   }
 
   handleSelect(event) {
     const selectedIndex = event.target.getAttribute("value");
     this.input.value = this.props.items[selectedIndex];
-    this.setState((prevState) => ({ ...prevState, displaySuggestion: false, selectedIndex}));
+    this.setState({displaySuggestion: false, selectedIndex});
   }
 
   handleKeyUp(event) {
@@ -95,7 +95,7 @@ export default class AutoComplete extends React.Component {
         if(selectedIndex < 0) {
           selectedIndex = 0;
         }
-        this.setState((prevState) => ({ ...prevState, selectedIndex }));
+        this.setState({selectedIndex});
         this.scrollDropDownIfNeeded(selectedIndex);
 
     } else if(keyCode === KEY_DOWN) {
@@ -103,12 +103,11 @@ export default class AutoComplete extends React.Component {
       if(selectedIndex == this.props.items.length) {
         selectedIndex = this.props.items.length - 1;
       }
-      this.setState((prevState) => ({ ...prevState, selectedIndex }));
+      this.setState({selectedIndex});
       this.scrollDropDownIfNeeded(selectedIndex);
     } else if(keyCode === KEY_ESCAPE) {
       this.closeSuggestion();
     } else if(event.keyCode == KEY_ENTER) {
-      console.log('selectedItem = ' + this.props.items[this.state.selectedIndex]);
       this.input.value = this.props.items[this.state.selectedIndex] || '';
       this.toggleSuggestion();
     } else {
@@ -125,7 +124,6 @@ export default class AutoComplete extends React.Component {
     return ((elemBottom <= parentBottom) && (elemTop >= parentTop));
   }
   scrollDropDownIfNeeded(index) {
-    console.log('scrollDropDownIfNeeded: index = ' + index);
     let domNode = ReactDOM.findDOMNode(this.dropDown);
 
     if(!this.isInViewPort(domNode, domNode.children[index])) {
@@ -149,7 +147,7 @@ export default class AutoComplete extends React.Component {
     return (
       <div style={{marginTop:'10px'}}>
         <div className={styles.dropdown}>
-          <input type="text" className={styles.input} autocomplete="off" spellcheck="false"
+          <input type="text" className={styles.input} autoComplete="off" spellCheck="false"
                 onFocus={this.openSuggestion}
                 onChange={this.handleChange}
                 ref={this.setRef}
