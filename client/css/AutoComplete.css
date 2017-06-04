@@ -38,7 +38,7 @@
   padding: 4px;
   -webkit-transform: rotate(45deg);
 }
-.suggestion {
+.dropdownList {
   background-color: #fff;
   width: 280px;
   border: solid 1px #cecece;
@@ -54,15 +54,15 @@
   border-top-width: 0;
   padding-top: 1px;
 }
-.suggestion.display {
+.dropdownList.show {
   display: block;
 }
 
-.suggestion div {
+.dropdownList div {
   line-height: 20px;
   padding: 5px;
   cursor: pointer;
 }
-.suggestion div.highlight {
+.dropdownList div.highlight {
   background: #e7e7e7;
 }
