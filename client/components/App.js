@@ -10,12 +10,24 @@ import RadioGroup from './RadioGroup';
 import TestRadio from './TestRadio';
 import TestRadioGroup from './TestRadioGroup';
 import AutoComplete from './AutoComplete';
+import Dialog from './Dialog';
+import sortBy from 'lodash.sortby';
 
 export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.openDialog = this.openDialog.bind(this);
+    this.state = {showDialog: false};
+  }
+  openDialog() {
+    this.setState({showDialog: true});
+  }
+
   render() {
     let { container, heading } = styles;
     const items1 = [{label: 'Yes', value: 'Yes'}, {label: 'No', value: 'No'}];
     const items2 = [{ label: 'True', value: 'True' }, { label: 'False', value: 'False'}];
+
     return (
       <div className={container}>
         <div className={heading}>A simple React + Redux app</div>
@@ -28,8 +40,18 @@ export default class App extends React.Component {
         <TestRadioGroup items={items1} value="Yes"/>
         <TestRadio label="Single One" value="Single"/>
         <SelectCountryOfTaxResidenceContainer taxInfoOfCountries={TAX_INFO_OF_COUNTRIES}/>
-        <AutoComplete items={COUNTRIES}/>
-
+        <div>
+          <div>GATCA Test</div>
+          <Gatca min={MIN_COUNTRY_OF_RESIDENCE} max={MAX_COUNTRY_OF_RESIDENCE} countryList={COUNTRY_LIST}/>
+        </div>
+        <AutoComplete items={COUNTRIES} style={{marginTop:'10px'}}/>
+        <Dialog show={this.state.showDialog} title={"My dialog"}>
+          <div>
+            <p>Paragraph 1</p>
+            <p>Paragraph 2</p>
+          </div>
+        </Dialog>
+        <input type="button" value="Open dialog" onClick={this.openDialog}/>
       </div>
     );
   }
