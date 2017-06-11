@@ -9,10 +9,9 @@ export default class Dialog extends React.Component {
   constructor(props) {
     super(props);
     this.close = this.close.bind(this);
-    this.state = {show: this.props.show};
     this.handleKeyUp = this.handleKeyUp.bind(this);
     this.setDialog = this.setDialog.bind(this);
-
+    this.state = {show: props.show};
   }
 
   componentWillReceiveProps(nextProps) {
@@ -20,7 +19,7 @@ export default class Dialog extends React.Component {
         this.setState({show: nextProps.show});
     }
   }
-  
+
   setDialog(dlg) {
     this.dlg = dlg;
   }

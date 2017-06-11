@@ -11,6 +11,7 @@ import TestRadio from './TestRadio';
 import TestRadioGroup from './TestRadioGroup';
 import AutoComplete from './AutoComplete';
 import Dialog from './Dialog';
+import DialogWithOverlay from './DialogWithOverlay';
 import sortBy from 'lodash.sortby';
 
 export default class App extends React.Component {
@@ -45,12 +46,12 @@ export default class App extends React.Component {
           <Gatca min={MIN_COUNTRY_OF_RESIDENCE} max={MAX_COUNTRY_OF_RESIDENCE} countryList={COUNTRY_LIST}/>
         </div>
         <AutoComplete items={COUNTRIES} style={{marginTop:'10px'}}/>
-        <Dialog show={this.state.showDialog} title={"My dialog"}>
+        <DialogWithOverlay show={this.state.showDialog} title="Dialog with overlay">
           <div>
             <p>Paragraph 1</p>
             <p>Paragraph 2</p>
           </div>
-        </Dialog>
+        </DialogWithOverlay>
         <input type="button" value="Open dialog" onClick={this.openDialog}/>
       </div>
     );
